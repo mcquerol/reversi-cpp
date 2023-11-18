@@ -170,7 +170,8 @@ bool CReversiBoard::isLegalMove(unsigned int row, unsigned int col)
  */
 void CReversiBoard::setPiece(unsigned int player, unsigned int row, unsigned int col)
 {
-    if (board[row][col] == POSSIBLE) {
+    if (board[row][col] == POSSIBLE)
+    {
         board[row][col] = player;  // Set the piece on the board
         flipAllDirections(row, col);  // Flip pieces in all directions
     }
@@ -256,16 +257,8 @@ int CReversiBoard::isGameOver()
  */
 void CReversiBoard::switchPlayer()
 {
-	if (currPlayer == WHITE)
-	{
-		currPlayer = BLACK;
-	}
-	else if (currPlayer == BLACK)
-	{
-		currPlayer = WHITE;
-	}
 
-	(currPlayer == WHITE) ? BLACK : WHITE;
+	currPlayer = (currPlayer == WHITE) ? BLACK : WHITE;
 }
 
 /**
@@ -310,12 +303,12 @@ void CReversiBoard::play()
 		cout <<"enter x and y coordinate (0-8) "<<endl;
 		cin >> x;
 		cin >> y;
-		if(x < 1 || x > 8 || y < 1 || y > 8)
+		if(!isLegalMove(x-1,y-1))
 		{
 			cout << "INVALID INPUT" << endl;
 		}
 
-	}while (x < 1 || x > 8 || y < 1 || y > 8);
+	}while (!isLegalMove(x-1,y-1));
 
 	setPiece(currPlayer, y - 1, x - 1); // x and y - 1 because arrays are 0 indexed
 	resetBoard();
