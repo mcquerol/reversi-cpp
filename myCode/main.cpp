@@ -31,7 +31,13 @@ int main (void)
 	cout << "TIE GAME" << endl;
 
 
-//TODO finish the rest of the loop and implement the other class
+//TODO finalize the main.cpp
+//TODO finish replacing the rows and cols with the constants
+//TODO add a #define for the outofbounds and replace each instance with the macro name
+//TODO add some kind of tie condition (no more spaces left in the board or somethign)
+//TODO verify the 2ndclass cpp and h files
+//TODO generate doxygen and verify the website and change the title of the website to REVERSI - 1112948
+
 
 	return 0;
 }
