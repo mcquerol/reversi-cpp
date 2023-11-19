@@ -19,16 +19,17 @@ using namespace std;
  *
  * 0 0 0 0 0 0 0 0
  * 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0
- * 0 0 0 1 2 0 0 0
- * 0 0 0 2 1 0 0 0
- * 0 0 0 0 0 0 0 0
+ * 0 0 0 3 0 0 0 0
+ * 0 0 3 1 2 0 0 0
+ * 0 0 0 2 1 3 0 0
+ * 0 0 0 0 3 0 0 0
  * 0 0 0 0 0 0 0 0
  * 0 0 0 0 0 0 0 0
  *
  * 0 = EMPTY
  * 1 = WHITE
  * 2 = BLACK
+ * 3 = POSSIBLE
  *
  */
 
@@ -39,16 +40,16 @@ CReversiBoard::CReversiBoard()
 	bScore = 2;
 	currPlayer = BLACK; // black moves first
 
-	board = new unsigned int*[NOROWS];
-	for (int index = 0; index < NOROWS; index++)
+	board = new unsigned int*[NO_ROWS];
+	for (int index = 0; index < NO_ROWS; index++)
 	{
-		board[index] = new unsigned int[NOCOLS];
+		board[index] = new unsigned int[NO_COLS];
 	}
 
 	//set all elements to empty
-	for(int r = 0; r < NOROWS; r++)
+	for(int r = 0; r < NO_ROWS; r++)
 	{
-		for(int c = 0; c < NOCOLS; c++)
+		for(int c = 0; c < NO_COLS; c++)
 		{
 			board[r][c] = EMPTY;
 		}
@@ -64,7 +65,7 @@ CReversiBoard::CReversiBoard()
 
 CReversiBoard::~CReversiBoard()
 {
-	for(int index = 0; index < NOROWS; index++)
+	for(int index = 0; index < NO_ROWS; index++)
 	{
 		delete [] board[index];
 	}
@@ -74,9 +75,9 @@ CReversiBoard::~CReversiBoard()
 void CReversiBoard::checkNeighbors(unsigned int currPlayer)
 {
     // Iterate through the entire board
-    for (int r = 0; r < NOROWS; r++)
+    for (int r = 0; r < NO_ROWS; r++)
     {
-        for (int c = 0; c < NOCOLS; c++)
+        for (int c = 0; c < NO_COLS; c++)
         {
             // Skip empty spaces
             if (board[r][c] == EMPTY)
@@ -112,7 +113,7 @@ void CReversiBoard::checkNeighbors(unsigned int currPlayer)
                     int col = c + dc;
 
                     // Skip out-of-bounds positions
-                    if (row < 0 || row >= 8 || col < 0 || col >= 8)
+                    if (OUT_OF_BOUNDS(row, col))
                     {
                         continue;
                     }
@@ -121,14 +122,14 @@ void CReversiBoard::checkNeighbors(unsigned int currPlayer)
                     if (board[row][col] != EMPTY && board[row][col] != currPlayer)
                     {
                         // Continue in the direction until an empty space or out-of-bounds is reached
-                        while (row >= 0 && row < 8 && col >= 0 && col < 8 && board[row][col] == (currPlayer == WHITE ? BLACK : WHITE))
+                        while (!OUT_OF_BOUNDS(row, col) && board[row][col] == (currPlayer == WHITE ? BLACK : WHITE))
                         {
                             row += dr;
                             col += dc;
                         }
 
                         // If the final position is within bounds and empty, mark it as POSSIBLE
-                        if (row >= 0 && row < 8 && col >= 0 && col < 8 && board[row][col] == EMPTY)
+                        if (!OUT_OF_BOUNDS(row, col) && board[row][col] == EMPTY)
                         {
                             board[row][col] = POSSIBLE;
                         }
@@ -141,7 +142,7 @@ void CReversiBoard::checkNeighbors(unsigned int currPlayer)
 
 bool CReversiBoard::isLegalMove(unsigned int row, unsigned int col)
 {
-	return (board[col][row] == POSSIBLE && (row >= 0 && row < 8 && col >= 0 && col < 8));
+	return (board[col][row] == POSSIBLE && (!OUT_OF_BOUNDS(row, col)));
 }
 
 void CReversiBoard::setPiece(unsigned int player, unsigned int row, unsigned int col)
@@ -171,7 +172,7 @@ void CReversiBoard::flip(int row, int col) {
             int c = col + dc;
             int flippedCount = 0;
 
-            while (r >= 0 && r < 8 && c >= 0 && c < 8) {
+            while (!OUT_OF_BOUNDS(r, c)) {
                 if (board[r][c] == EMPTY) {
                     break;
                 } else if (board[r][c] == currPlayer) {
@@ -221,8 +222,7 @@ void CReversiBoard::play()
 	unsigned int y; //y user input
 	string playerStr;
 
-
-	playerStr = (currPlayer == WHITE) ? "WHITE" : "BLACK";
+	playerStr = (currPlayer == WHITE) ? "WHITE" : "BLACK"; //set player string for output
 
 	checkNeighbors(currPlayer);
 
@@ -232,7 +232,7 @@ void CReversiBoard::play()
 	//x,y input validation
 	do
 	{
-		cout <<"enter x and y coordinate (0-8) "<<endl;
+		cout << "enter x and y coordinate (1-8) "<< endl;
 		cin >> x;
 		cin >> y;
 		if(!isLegalMove(x - 1,y - 1))
@@ -251,9 +251,9 @@ void CReversiBoard::play()
 
 void CReversiBoard::resetBoard()
 {
-  	for(int r = 0; r < NOROWS; r++)
+  	for(int r = 0; r < NO_ROWS; r++)
 	{
-  		for (int c = 0; c < NOCOLS; c++)
+  		for (int c = 0; c < NO_COLS; c++)
   		{
   	  		if(board[r][c] == POSSIBLE)
   	  		{
