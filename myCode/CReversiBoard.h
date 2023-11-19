@@ -1,6 +1,12 @@
 #ifndef CREVERSIBOARD_H_
 #define CREVERSIBOARD_H_
 
+
+#define NO_ROWS 8
+#define NO_COLS 8
+
+#define OUT_OF_BOUNDS(row, col) (row < 1 || row > NOROWS) && (col < 1 || col > NOCOLS)
+
 class CReversiBoard {
 private:
     enum States {
@@ -10,8 +16,6 @@ private:
         POSSIBLE
     };
 
-    const int NOROWS = 8;
-    const int NOCOLS = 8;
 
     unsigned int currPlayer;
     unsigned int wScore;
