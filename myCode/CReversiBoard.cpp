@@ -34,10 +34,11 @@ using namespace std;
 
 CReversiBoard::CReversiBoard()
 {
-	//each colour starts with 2 pieces on the board
 	wScore = 2;
 	bScore = 2;
+
 	currPlayer = BLACK; // black moves first
+
 	board = new unsigned int*[8];
 	for (unsigned int index = 0; index < 8; index++)
 	{
@@ -56,6 +57,7 @@ CReversiBoard::CReversiBoard()
 	board[3][4] = BLACK;
 	board[4][3] = BLACK;
 	board[4][4] = WHITE;
+
 }
 
 CReversiBoard::~CReversiBoard()
@@ -66,16 +68,6 @@ CReversiBoard::~CReversiBoard()
 	}
 	delete [] board;
 }
-
-
-/**
- * CReversiBoard::checkNeighbors()
- *
- * This method checks the surrounding array elements
- * of non empty elements and assigns them as POSSIBLE
- * this indicates where the player can set the next marker
- */
-
 
 void CReversiBoard::checkNeighbors(unsigned int currPlayer)
 {
@@ -145,91 +137,73 @@ void CReversiBoard::checkNeighbors(unsigned int currPlayer)
     }
 }
 
-
-
-/**
- * CReversiBoard::isLegalMove()
- *
- * Check if a move is possible AND if it is out of bounds
- * INPUT: x, y (user input)
- * OUTPUT: bool (true/false)
- */
 bool CReversiBoard::isLegalMove(unsigned int row, unsigned int col)
 {
-	return (board[row][col] == 3 && (row >= 0 && row < 8 && col >= 0 && col < 8));
+	return (board[col][row] == POSSIBLE && (row >= 0 && row < 8 && col >= 0 && col < 8));
 }
 
-/**
- * CReversiBoard::setPiece()
- *
- * set the currPlayer's color at position x,y
- * if it can be placed there
- *
- * INPUT: x, y,(user input) and currPlayer
- * OUTPUT: void
- */
 void CReversiBoard::setPiece(unsigned int player, unsigned int row, unsigned int col)
 {
     if (board[row][col] == POSSIBLE)
     {
         board[row][col] = player;  // Set the piece on the board
-        flipAllDirections(row, col);  // Flip pieces in all directions
-    }
-}
 
-
-
-/**
- * CReversiBoard::flip()
- *
- * this method is called by the CReversiBoard::Play() method passing input parameters x and y
- * (given by the user). It recursively calls the CReversiBoard::flipLine() method with different delta values
- * This is to check all 8 directions for possible flips
- *
- * INPUT: x, y (user input)
- * OUTPUT: void
- */
-
-void CReversiBoard::flip(int row, int col, int dr, int dc) {
-    int r = row + dr;
-    int c = col + dc;
-
-    while (r >= 0 && r < 8 && c >= 0 && c < 8) {
-        if (board[r][c] == EMPTY) {
-            break;  // Stop flipping when an empty space is encountered
-        } else if (board[r][c] == currPlayer) {
-            // Flip the pieces only when the loop encounters the same color
-            while (r != row || c != col) {
-                r -= dr;
-                c -= dc;
-                board[r][c] = currPlayer;  // Flip the piece
-            }
-            break;
+        if (currPlayer == WHITE) { //increment the score by 1
+            wScore++;
+        } else {
+            bScore++;
         }
-        r += dr;
-        c += dc;
+        flip(row, col);  // Flip pieces in all directions
     }
 }
 
 
-void CReversiBoard::flipAllDirections(int row, int col) {
+void CReversiBoard::flip(int row, int col) {
     for (int dr = -1; dr <= 1; ++dr) {
         for (int dc = -1; dc <= 1; ++dc) {
-            if (dr == 0 && dc == 0) continue;  // Skip the current position
-            flip(row, col, dr, dc);  // Flip pieces in the specified direction
+            if (dr == 0 && dc == 0)
+			{
+            	continue;  // Skip the current position
+			}
+
+            int r = row + dr;
+            int c = col + dc;
+            int flippedCount = 0;
+
+            while (r >= 0 && r < 8 && c >= 0 && c < 8) {
+                if (board[r][c] == EMPTY) {
+                    break;
+                } else if (board[r][c] == currPlayer) {
+                    // Flip the pieces only if the loop encountered the same color
+                    while (flippedCount > 0) {
+                        r -= dr;
+                        c -= dc;
+                        board[r][c] = currPlayer;  // Flip the piece
+
+                        // Update scores based on the current player
+                        if (currPlayer == WHITE) {
+                            wScore++;
+                            bScore--;
+                        } else {
+                            bScore++;
+                            wScore--;
+                        }
+
+                        flippedCount--;
+                    }
+                    break;
+                } else {
+                    // Continue flipping in the same direction
+                    r += dr;
+                    c += dc;
+                    flippedCount++;
+                }
+            }
         }
     }
 }
 
-/**
- * CReversiBoard::isGameOver()
- *
- * Checks if the game is over by the score of each player,
- * if white's score is 0 then black wins and if black's score is 0 white wins
- * This is checked in the main superloop after each player has set a marker
- * INPUT: void
- * OUTPUT: 1 (black wins), 2 (white wins), 0 (game continues)
- */
+
 int CReversiBoard::isGameOver()
 {
 	if(wScore == 0) // black wins
@@ -246,36 +220,12 @@ int CReversiBoard::isGameOver()
 	}
 }
 
-/**
- * CReversiBoard::switchPlayer()
- *
- * This method changes the class attribute from
- * WHITE to BLACK or vice versa
- *
- * INPUT: void
- * OUTPUT: void
- */
 void CReversiBoard::switchPlayer()
 {
 
 	currPlayer = (currPlayer == WHITE) ? BLACK : WHITE;
 }
 
-/**
- * CReversiBoard::play()
- *
- * This method creates a control flow for the reversi game by combining
- * all of the methods from this class to make a 2 player reversi game
- *
- * This method is looped 64 times in main.cpp because there are 64
- * spaces and if no one wins after 64 rounds then the game is a TIE
- *
- * This method calls the CReversiConsoleView class' print function by passing the
- * board array as a pointer
- *
- * INPUT: x, y (user input)
- * OUTPUT: void
- */
 void CReversiBoard::play()
 {
 	CReversiConsoleView screen((unsigned int**)board); //create local screen object
@@ -284,18 +234,11 @@ void CReversiBoard::play()
 	string playerStr;
 
 
-	if(currPlayer == WHITE)
-	{
-		playerStr = "WHITE";
-	}
-	else if(currPlayer == BLACK)
-	{
-		playerStr = "BLACK";
-	}
+	playerStr = (currPlayer == WHITE) ? "WHITE" : "BLACK";
 	checkNeighbors(currPlayer);
 
 	//call the print function passing the player string
-	screen.print(playerStr, this->wScore, this->bScore);
+	screen.print(playerStr, wScore, bScore);
 
 	//x,y input validation
 	do
@@ -303,12 +246,12 @@ void CReversiBoard::play()
 		cout <<"enter x and y coordinate (0-8) "<<endl;
 		cin >> x;
 		cin >> y;
-		if(!isLegalMove(x-1,y-1))
+		if(!isLegalMove(x - 1,y - 1))
 		{
-			cout << "INVALID INPUT" << endl;
+			cout << "INVALID MOVE" << endl;
 		}
 
-	}while (!isLegalMove(x-1,y-1));
+	}while (!isLegalMove(x - 1,y - 1));
 
 	setPiece(currPlayer, y - 1, x - 1); // x and y - 1 because arrays are 0 indexed
 	resetBoard();
@@ -317,15 +260,6 @@ void CReversiBoard::play()
 
 }
 
-/**
- * CReversiBoard::play()
- *
- * This method loops through the entire board and if it finds a POSSIBLE
- * element, it clears it. This is to reset the prespective when switching players
- *
- * INPUT: void
- * OUTPUT: void
- */
 void CReversiBoard::resetBoard()
 {
   	for(int r = 0; r < 8; r++)
