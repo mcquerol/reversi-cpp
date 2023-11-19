@@ -31,7 +31,7 @@ int main (void)
 	cout << "TIE GAME" << endl;
 
 
-//TODO finalize the main.cpp
+//TODO finalize the main.cpp (fix stuff and take out the loop think)
 //TODO finish replacing the rows and cols with the constants
 //TODO add a #define for the outofbounds and replace each instance with the macro name
 //TODO add some kind of tie condition (no more spaces left in the board or somethign)
