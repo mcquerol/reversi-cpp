@@ -34,25 +34,27 @@ using namespace std;
 
 CReversiBoard::CReversiBoard()
 {
+	//the game starts with 2 pieces of each color
 	wScore = 2;
 	bScore = 2;
-
 	currPlayer = BLACK; // black moves first
 
-	board = new unsigned int*[8];
-	for (unsigned int index = 0; index < 8; index++)
+	board = new unsigned int*[NOROWS];
+	for (int index = 0; index < NOROWS; index++)
 	{
-		board[index] = new unsigned int[8];
+		board[index] = new unsigned int[NOCOLS];
 	}
+
 	//set all elements to empty
-	for(int r = 0; r < 8; r++)
+	for(int r = 0; r < NOROWS; r++)
 	{
-		for(int c = 0; c < 8; c++)
+		for(int c = 0; c < NOCOLS; c++)
 		{
 			board[r][c] = EMPTY;
 		}
 	}
-	//BUT...set the middle 4 pieces respectively
+
+	//Starting positions for Reversi
 	board[3][3] = WHITE;
 	board[3][4] = BLACK;
 	board[4][3] = BLACK;
@@ -62,7 +64,7 @@ CReversiBoard::CReversiBoard()
 
 CReversiBoard::~CReversiBoard()
 {
-	for(int index = 0; index <8; index++)
+	for(int index = 0; index < NOROWS; index++)
 	{
 		delete [] board[index];
 	}
@@ -72,9 +74,9 @@ CReversiBoard::~CReversiBoard()
 void CReversiBoard::checkNeighbors(unsigned int currPlayer)
 {
     // Iterate through the entire board
-    for (int r = 0; r < 8; ++r)
+    for (int r = 0; r < NOROWS; r++)
     {
-        for (int c = 0; c < 8; ++c)
+        for (int c = 0; c < NOCOLS; c++)
         {
             // Skip empty spaces
             if (board[r][c] == EMPTY)
@@ -157,10 +159,9 @@ void CReversiBoard::setPiece(unsigned int player, unsigned int row, unsigned int
     }
 }
 
-
 void CReversiBoard::flip(int row, int col) {
-    for (int dr = -1; dr <= 1; ++dr) {
-        for (int dc = -1; dc <= 1; ++dc) {
+    for (int dr = -1; dr <= 1; dr++) {
+        for (int dc = -1; dc <= 1; dc++) {
             if (dr == 0 && dc == 0)
 			{
             	continue;  // Skip the current position
@@ -203,26 +204,13 @@ void CReversiBoard::flip(int row, int col) {
     }
 }
 
-
 int CReversiBoard::isGameOver()
 {
-	if(wScore == 0) // black wins
-	{
-		return 1;
-	}
-	else if(bScore == 0) // white wins
-	{
-		return 2;
-	}
-	else
-	{
-		return 0; // game continues
-	}
+	return (wScore == 0) ? WHITE : (bScore == 0) ? BLACK : 0;
 }
 
 void CReversiBoard::switchPlayer()
 {
-
 	currPlayer = (currPlayer == WHITE) ? BLACK : WHITE;
 }
 
@@ -235,6 +223,7 @@ void CReversiBoard::play()
 
 
 	playerStr = (currPlayer == WHITE) ? "WHITE" : "BLACK";
+
 	checkNeighbors(currPlayer);
 
 	//call the print function passing the player string
@@ -253,7 +242,7 @@ void CReversiBoard::play()
 
 	}while (!isLegalMove(x - 1,y - 1));
 
-	setPiece(currPlayer, y - 1, x - 1); // x and y - 1 because arrays are 0 indexed
+	setPiece(currPlayer, y - 1, x - 1); // x and y are - 1 because arrays are 0 indexed
 	resetBoard();
 	switchPlayer();
 
@@ -262,9 +251,9 @@ void CReversiBoard::play()
 
 void CReversiBoard::resetBoard()
 {
-  	for(int r = 0; r < 8; r++)
+  	for(int r = 0; r < NOROWS; r++)
 	{
-  		for (int c = 0; c < 8; c++)
+  		for (int c = 0; c < NOCOLS; c++)
   		{
   	  		if(board[r][c] == POSSIBLE)
   	  		{
