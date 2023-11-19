@@ -4,8 +4,7 @@
 
 #define NO_ROWS 8
 #define NO_COLS 8
-
-#define OUT_OF_BOUNDS(row, col) (row < 1 || row > NOROWS) && (col < 1 || col > NOCOLS)
+#define OUT_OF_BOUNDS(row, col) (row < 1 && row > NO_ROWS && col < 1 && col > NO_COLS)
 
 class CReversiBoard {
 private:
@@ -15,7 +14,6 @@ private:
         BLACK,
         POSSIBLE
     };
-
 
     unsigned int currPlayer;
     unsigned int wScore;
