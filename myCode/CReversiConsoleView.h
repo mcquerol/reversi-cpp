@@ -13,20 +13,20 @@ class CReversiConsoleView
 {
 
 private:
-	unsigned int **boardptr;
+	int **boardptr;
 public:
 
 	/*
 	 * Constructor of this class takes the double pointer from the CReversiBoard class and
 	 */
-	CReversiConsoleView(unsigned int **board);
+	CReversiConsoleView(int **board);
 	~CReversiConsoleView();
 
 	/** print()
 	 *
 	 * print the board pass from the CReversiBoard class with each player's score
 	 */
-	void print(std::string playerStr, unsigned int wScore, unsigned int bScore);
+	void print(std::string playerStr, int wScore, int bScore);
 };
 
 #endif /* CREVERSICONSOLEVIEW_H_ */

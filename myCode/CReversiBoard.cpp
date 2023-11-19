@@ -40,10 +40,10 @@ CReversiBoard::CReversiBoard()
 	bScore = 2;
 	currPlayer = BLACK; // black moves first
 
-	board = new unsigned int*[NO_ROWS];
+	board = new int*[NO_ROWS];
 	for (int index = 0; index < NO_ROWS; index++)
 	{
-		board[index] = new unsigned int[NO_COLS];
+		board[index] = new int[NO_COLS];
 	}
 
 	//set all elements to empty
@@ -72,7 +72,7 @@ CReversiBoard::~CReversiBoard()
 	delete [] board;
 }
 
-void CReversiBoard::checkNeighbors(unsigned int currPlayer)
+void CReversiBoard::checkNeighbors()
 {
     // Iterate through the entire board
     for (int r = 0; r < NO_ROWS; r++)
@@ -140,12 +140,12 @@ void CReversiBoard::checkNeighbors(unsigned int currPlayer)
     }
 }
 
-bool CReversiBoard::isLegalMove(unsigned int row, unsigned int col)
+bool CReversiBoard::isLegalMove(int row, int col)
 {
 	return (board[col][row] == POSSIBLE && (!OUT_OF_BOUNDS(row, col)));
 }
 
-void CReversiBoard::setPiece(unsigned int player, unsigned int row, unsigned int col)
+void CReversiBoard::setPiece(int player, int row, int col)
 {
     if (board[row][col] == POSSIBLE)
     {
@@ -217,14 +217,14 @@ void CReversiBoard::switchPlayer()
 
 void CReversiBoard::play()
 {
-	CReversiConsoleView screen((unsigned int**)board); //create local screen object
+	CReversiConsoleView screen((int**)board); //create local screen object
 	unsigned int x; //x user input
 	unsigned int y; //y user input
 	string playerStr;
 
 	playerStr = (currPlayer == WHITE) ? "WHITE" : "BLACK"; //set player string for output
 
-	checkNeighbors(currPlayer);
+	checkNeighbors();
 
 	//call the print function passing the player string
 	screen.print(playerStr, wScore, bScore);

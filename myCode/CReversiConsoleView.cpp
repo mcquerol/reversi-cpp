@@ -11,7 +11,7 @@
 
 using namespace std;
 
-CReversiConsoleView::CReversiConsoleView(unsigned int **board)
+CReversiConsoleView::CReversiConsoleView(int **board)
 {
 	boardptr = board;
 }
@@ -27,7 +27,7 @@ CReversiConsoleView::~CReversiConsoleView()
  * CReversiBoard class. It also prints the current player's turn
  * and makes the board look pretty
  */
-void CReversiConsoleView::print(std::string playerStr, unsigned int wScore, unsigned int bScore)
+void CReversiConsoleView::print(std::string playerStr, int wScore, int bScore)
 {
 	cout << "-----------------" << endl;
 	cout << playerStr << "'s turn" << endl;

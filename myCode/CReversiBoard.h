@@ -15,15 +15,15 @@ private:
         POSSIBLE
     };
 
-    unsigned int currPlayer;
-    unsigned int wScore;
-    unsigned int bScore;
+    int currPlayer;
+    int wScore;
+    int bScore;
 
-    unsigned int** board;
+    int** board;
 
-    void checkNeighbors(unsigned int color);
-    bool isLegalMove(unsigned int x, unsigned int y);
-    void setPiece(unsigned int currPlayer, unsigned int x, unsigned int y);
+    void checkNeighbors();
+    bool isLegalMove(int row, int col);
+    void setPiece(int currPlayer, int row, int col);
     void flip(int row, int col);
 
     void switchPlayer();
