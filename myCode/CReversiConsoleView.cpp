@@ -6,6 +6,7 @@
  */
 
 #include "CReversiConsoleView.h"
+#include "CReversiBoard.h"
 #include <iostream>
 
 using namespace std;
@@ -32,15 +33,15 @@ void CReversiConsoleView::print(std::string playerStr, unsigned int wScore, unsi
 	cout << playerStr << "'s turn" << endl;
   	cout << "-----------------" << endl;
   	cout << " ";
-	for(int col = 0; col < 8; col++)
+	for(int col = 0; col < NO_COLS; col++)
 	{
-		cout << " " << col+1; //column numbers
+		cout << " " << col + 1; //column numbers
 	}
 	cout << endl;
-  	for(int row = 0; row < 8; row++)
+  	for(int row = 0; row < NO_ROWS; row++)
 	{
-  		cout << row+1 << " "; // row numbers
-		for(int col = 0; col < 8; col++)
+  		cout << row + 1 << " "; // row numbers
+		for(int col = 0; col < NO_COLS; col++)
 	    {
 			switch(boardptr[row][col])
 			{
@@ -61,7 +62,7 @@ void CReversiConsoleView::print(std::string playerStr, unsigned int wScore, unsi
 	}
   	//output scores
   	cout << "-----------------" << endl;
-  	cout << "BLACK's score: " << bScore <<  endl;
+  	cout << "BLACK's score: " << bScore << endl;
   	cout << "WHITE's score: " << wScore << endl;
   	cout << "-----------------" << endl;
 }
