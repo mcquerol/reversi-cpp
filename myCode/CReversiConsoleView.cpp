@@ -1,67 +1,71 @@
-/*
- * CReversiConsoleView.cpp
- *
- *  Created on: 8 Nov 2021
- *      Author: Mateo C. Querol
- */
-
 #include "CReversiConsoleView.h"
+#include "CReversiBoard.h"
+
 #include <iostream>
 
-using namespace std;
-
-CReversiConsoleView::CReversiConsoleView(unsigned int **board)
+/**
+ * @brief Constructor for CReversiConsoleView class.
+ * @param board The double pointer to the game board.
+ */
+CReversiConsoleView::CReversiConsoleView(CReversiBoard::eStates **board)
 {
-	boardptr = board;
+	m_pBoard = board;
 }
 
+/**
+ * @brief Destructor for CReversiConsoleView class.
+ */
 CReversiConsoleView::~CReversiConsoleView()
 {
 
 }
 
-/** CReversiConsoleView::print()
- *
- * This method prints the board passed as a double pointer from the
- * CReversiBoard class. It also prints the current player's turn
- * and makes the board look pretty
+/**
+ * @brief Prints the current state of the game board along with scores.
+ * @param playerStr String representation of the current player.
+ * @param wScore White player's score.
+ * @param bScore Black player's score.
  */
-void CReversiConsoleView::print(std::string playerStr, unsigned int wScore, unsigned int bScore)
+void CReversiConsoleView::print(std::string playerStr, int wScore, int bScore) const
 {
-	cout << "-----------------" << endl;
-	cout << playerStr << "'s turn" << endl;
-  	cout << "-----------------" << endl;
-  	cout << " ";
-	for(int col = 0; col < 8; col++)
+
+	std::cout << "-----------------" << std::endl;
+	std::cout << playerStr << "'s turn" << std::endl;
+  	std::cout << "-----------------" << std::endl;
+  	std::cout << " ";
+	for(int col = 0; col < NO_COLS; col++)
 	{
-		cout << " " << col+1; //column numbers
+		std::cout << " " << col + 1; //column numbers
 	}
-	cout << endl;
-  	for(int row = 0; row < 8; row++)
+	std::cout << std::endl;
+  	for(int row = 0; row < NO_ROWS; row++)
 	{
-  		cout << row+1 << " "; // row numbers
-		for(int col = 0; col < 8; col++)
+  		std::cout << row + 1 << " "; // row numbers
+		for(int col = 0; col < NO_COLS; col++)
 	    {
-			switch(boardptr[row][col])
+			switch(m_pBoard[row][col])
 			{
-			case 0:
-				cout << '-' << " ";
+			case CReversiBoard::eStates::EMPTY:
+				std::cout << '-' << " ";
 				break;
-			case 1:
-				cout << 'W' << " ";
+			case CReversiBoard::eStates::WHITE:
+				std::cout << 'W' << " ";
 				break;
-			case 2:
-				cout << 'B' << " ";
+			case CReversiBoard::eStates::BLACK:
+				std::cout << 'B' << " ";
 				break;
-			case 3:
-				cout << '*' << " ";
+			case CReversiBoard::eStates::POSSIBLE:
+				std::cout << '*' << " ";
+				break;
+			default:
+				std::cout << "NULL" << " "; //NULL pointer
 			}
 	    }
-		cout << endl;
+		std::cout << std::endl;
 	}
   	//output scores
-  	cout << "-----------------" << endl;
-  	cout << "BLACK's score: " << bScore <<  endl;
-  	cout << "WHITE's score: " << wScore << endl;
-  	cout << "-----------------" << endl;
+  	std::cout << "-----------------" << std::endl;
+  	std::cout << "BLACK's score: " << bScore << std::endl;
+  	std::cout << "WHITE's score: " << wScore << std::endl;
+  	std::cout << "-----------------" << std::endl;
 }

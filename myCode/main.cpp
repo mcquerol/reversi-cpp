@@ -1,37 +1,32 @@
 #include "CReversiBoard.h"
+
 #include <iostream>
-#include <algorithm>
-#include <stdlib.h>
-
-
-using namespace std;
-
-
 int main (void)
 {
 
 	CReversiBoard game;
-	cout << "REVERSI GAME" << endl;
-	for (int round = 0; round < 64; round++)
+	std::cout << "REVERSI GAME" << std::endl;
+	while(game.isGameOver() == 0)
 	{
 		game.play(); //start the game
-		if(game.isGameOver() == 1)
+		switch(game.isGameOver())
 		{
-			cout << "BLACK WINS!!" << endl;
-		}
-		else if (game.isGameOver() == 2)
-		{
-			cout << "WHITE WINS!!" << endl;
-		}
-		else
-		{
-			continue;
+			case 0: //game not over
+				continue;
+			case 1: //white wins
+				std::cout << "WHITE WINS!!" << std::endl;
+				break;
+			case 2: //black wins
+				std::cout << "BLACK WINS!!" << std::endl;
+				break;
+			case 3: //time game
+				std::cout << "TIE GAME!!" << std::endl;
+				break;
+			default:
+				std::cerr << "ERROR" << std::endl;
+				break;
 		}
 	}
-	cout << "TIE GAME" << endl;
-
-
-//TODO finish the rest of the loop and implement the other class
 
 	return 0;
 }
