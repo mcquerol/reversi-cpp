@@ -1,6 +1,6 @@
 # Detect only C files
-*.cpp linguist-detectable=true
+*.cpp linguist-detectable=false
 *.h linguist-detectable=true
 
 # Exclude everything else
-* linguist-detectable=false
+# * linguist-detectable=false
